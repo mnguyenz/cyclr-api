@@ -1,6 +1,6 @@
 {
     "name": "cyclr-api",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Cyclr APIs Connector using Typescript",
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",
@@ -38,7 +38,6 @@
     },
     "devDependencies": {
         "@types/jest": "29.5.12",
-        "@types/json-bigint": "1.0.4",
         "@typescript-eslint/eslint-plugin": "7.9.0",
         "@typescript-eslint/parser": "7.9.0",
         "eslint": "8.56.0",

@@ -1,0 +1,60 @@
+name: "publish npm"
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - name: Package Version Updated
+        uses: MontyD/package-json-updated-action@1.0.1
+        id: version-updated
+        with:
+          path: package.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout Code
+        if: steps.version-updated.outputs.has-updated
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        if: steps.version-updated.outputs.has-updated
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        if: steps.version-updated.outputs.has-updated
+        run: npm install
+
+      - name: Check
+        if: steps.version-updated.outputs.has-updated
+        run: npm run check
+
+      - name: Lint
+        if: steps.version-updated.outputs.has-updated
+        run: npm run lint
+
+      # - name: Test
+      #   if: steps.version-updated.outputs.has-updated
+      #   run: npm run test
+      #   env:
+      #     CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      #     CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+
+      - name: Create Build Files
+        if: steps.version-updated.outputs.has-updated
+        run: npm run build
+
+      - name: Compare versions and conditionally publish
+        if: steps.version-updated.outputs.has-updated
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

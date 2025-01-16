@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const env = {
-    BINGX_API_KEY: process.env.BINGX_API_KEY,
-    BINGX_API_SECRET: process.env.BINGX_API_SECRET
+    CLIENT_ID: process.env.CLIENT_ID,
+    CLIENT_SECRET: process.env.CLIENT_SECRET,
+    CYCLR_DOMAIN: process.env.CYCLR_DOMAIN
 };

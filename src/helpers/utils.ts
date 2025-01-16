@@ -3,16 +3,14 @@ import { HttpRequestConfig } from './base.type';
 
 export async function httpRequest(config: HttpRequestConfig) {
     try {
-        const { baseURL, apiKey, method, url } = config;
+        const { cyclrDomain, url, method } = config;
         const options = {
-            baseURL,
+            cyclrDomain,
             method,
             url,
             headers: {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                'Content-Type': 'application/json',
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                'X-BX-APIKEY': apiKey
+                'Content-Type': 'application/json'
             },
             transformResponse: [(data) => data]
         };
@@ -42,19 +40,4 @@ export function buildQueryString(params: object): string {
 function stringifyKeyValuePair([key, value]: [string, string]) {
     const valueString = Array.isArray(value) ? `["${value.join('","')}"]` : value;
     return `${key}=${encodeURIComponent(valueString)}`;
-}
-
-export function convertOrderIdsToBigInt(obj: any): any {
-    if (Array.isArray(obj)) {
-        return obj.map(convertOrderIdsToBigInt);
-    } else if (typeof obj === 'object' && obj !== null) {
-        for (const key in obj) {
-            if (key === 'orderId') {
-                obj[key] = BigInt(obj[key]);
-            } else {
-                obj[key] = convertOrderIdsToBigInt(obj[key]);
-            }
-        }
-    }
-    return obj;
 }
